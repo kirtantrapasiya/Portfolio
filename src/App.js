@@ -10,19 +10,19 @@ import ProjectData from "./Project/ProjectData";
 import Contact from "./Contact/Contact";
 import Footer from "./Footer/Footer";
 import { useState, useRef } from "react";
-import image from "./Images/photos/image.jpg"
+// import image from "./Images/photos/image.jpg"
 import Logo from "./Images/photos/logo.png";
 import IntroWrapper from "./components/IntroWrapper";
 import { Element } from "react-scroll";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Helmet } from "react-helmet-async"; // ✅ Import Helmet
+import { Helmet, HelmetProvider } from "react-helmet-async"; 
 
 const App = () => {
   const [allSkills] = useState(Skilldata);
   const [allProjects] = useState(ProjectData);
 
-  const scrollRef = useRef(null); // store animation frame ID
+  const scrollRef = useRef(null); 
 
   const scrollToBottomSmooth = () => {
     const targetY = document.body.scrollHeight;
@@ -63,7 +63,6 @@ const App = () => {
 
   return (
     <IntroWrapper>
-      {/* ✅ SEO Helmet */}
       <Helmet>
         <title>Kirtan Trapasiya - Frontend Developer Portfolio</title>
         <meta
@@ -79,18 +78,14 @@ const App = () => {
       </Helmet>
 
       <div className="min-h-screen font-sans">
-        {/* Navbar */}
         <Navbar Logo={Logo} />
 
-        {/* Home with button */}
-        <Home backgroundImage={image} onViewPortfolio={scrollToBottomSmooth} />
+        <Home backgroundImage={null} onViewPortfolio={scrollToBottomSmooth} />
 
-        {/* Skills */}
         <section id="skills" className="max-w-7xl mx-auto px-4 py-12">
           <Skills skills={allSkills} />
         </section>
 
-        {/* About & Education */}
         <section
           id="aboutOReducation"
           className="bg-[#2E402C] text-white w-full py-4"
@@ -105,12 +100,10 @@ const App = () => {
           </div>
         </section>
 
-        {/* Projects */}
         <section id="projects" className="max-w-7xl mx-auto px-4 py-16">
           <Projects projects={allProjects} />
         </section>
 
-        {/* Contact wrapped in <Element> */}
         <Element name="contactSection">
           <section id="contact" className="bg-[#2E402C] py-16">
             <div className="max-w-7xl mx-auto px-4">
@@ -119,13 +112,11 @@ const App = () => {
           </section>
         </Element>
 
-        {/* Footer */}
         <footer>
           <Footer />
         </footer>
       </div>
 
-      {/* Toast Container */}
       <ToastContainer
         position="top-right"
         autoClose={4000}

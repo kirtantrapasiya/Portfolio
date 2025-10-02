@@ -77,7 +77,7 @@ const Contact = () => {
               </li>
             </ul>
           </div>
-          {/* Status Message */}
+          
           {statusMessage && (
             <div className={`text-sm w-80% p-4 mt-8 rounded-lg ${messageType === 'success' ? 'bg-green-50 text-green-800' : 'bg-yellow-50 text-yellow-800'}`}>
               {statusMessage}

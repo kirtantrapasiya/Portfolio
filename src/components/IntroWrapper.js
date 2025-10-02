@@ -14,7 +14,6 @@ const IntroWrapper = ({ children }) => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white relative overflow-hidden">
       <AnimatePresence mode="wait">
-        {/* Step 1: Lottie Animation */}
         {stage === "lottie" && (
           <motion.div
             key="animation"
@@ -33,7 +32,6 @@ const IntroWrapper = ({ children }) => {
           </motion.div>
         )}
 
-        {/* Step 2: Card Reveal */}
         {stage === "card" && (
           <motion.div
             key="card"
@@ -44,7 +42,7 @@ const IntroWrapper = ({ children }) => {
             onAnimationComplete={() => {
               setTimeout(() => {
                 setStage("website");
-              }, 1000); // hold time in ms
+              }, 1000);
             }}
             className="bg-white shadow-2xl rounded-2xl p-4 flex items-center justify-center overflow-hidden"
           >
@@ -56,7 +54,6 @@ const IntroWrapper = ({ children }) => {
           </motion.div>
         )}
 
-        {/* Step 3: Main Website */}
         {stage === "website" && (
           <motion.div
             key="website"

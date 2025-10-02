@@ -6,7 +6,6 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Global font */
 body {
   font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
