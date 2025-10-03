@@ -3,9 +3,9 @@ import { Typewriter } from "react-simple-typewriter";
 import { ChevronDown } from "lucide-react";
 import PlayButton from "../Button/PlayButton";
 import FadeSlide from "../components/FadeSlide";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
-const Home = ({ backgroundImage, onViewPortfolio }) => {
+const Home = ({ backgroundImage, onViewPortfolio, isScrolling }) => {
   const scrollToNext = () => {
     const nextSection = document.querySelector("#skills");
     if (nextSection) nextSection.scrollIntoView({ behavior: "smooth" });
@@ -73,14 +73,20 @@ const Home = ({ backgroundImage, onViewPortfolio }) => {
         </FadeSlide>
 
         <FadeSlide delay={0.8} direction="up">
-          <div className="flex justify-center items-center gap-4">
-            <PlayButton className="scale-78" onClick={onViewPortfolio} />
-            <button
-              onClick={handleHireMeClick}
-              className="border-2 border-white text-white px-3 py-1 rounded-full transition"
-            >
-              Hire Me
-            </button>
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex justify-center items-center gap-4">
+              <PlayButton 
+                onClick={onViewPortfolio}
+                isScrolling={isScrolling}
+                className="scale-78"
+              />
+              <button
+                onClick={handleHireMeClick}
+                className="border-2 border-white text-white px-3 py-1 rounded-full transition hover:bg-white hover:text-black"
+              >
+                Hire Me
+              </button>
+            </div>
           </div>
         </FadeSlide>
       </div>

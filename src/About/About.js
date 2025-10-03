@@ -1,11 +1,12 @@
 import React from 'react';
 import FadeSlide from '../components/FadeSlide';
+import cvFile from "../Images/files/Kirtan Trapasiya CV.pdf";
 
 const About = () => {
+
   const handleDownloadCV = () => {
     try {
-      const link = '/files/Kirtan Trapasiya CV.pdf';
-      window.open(link, '_blank');
+      window.open(cvFile, "_blank");
     } catch (error) {
       console.error("Download failed:", error);
     }
@@ -30,14 +31,14 @@ const About = () => {
 
         <FadeSlide delay={0.8} direction="up">
           <h3 className="text-xl font-semibold text-yellow-400 mb-2">
-            Bachelor of Engineering (Computer Engineering) CGPA: 7.61
+            Bachelor of Engineering (Computer Engineering)
           </h3>
         </FadeSlide>
 
         <FadeSlide delay={1.0} direction="up">
           <p className="text-gray-300 mb-8 leading-relaxed max-w-3xl">
             Currently pursuing Computer Engineering at Government Engineering College, Bhavnagar. 
-            Focusing on Cloud Computing, Progressive Web Applications, and Full-Stack Development.
+            Focusing on AI Engineering, Progressive Web Applications, and Full-Stack Development.
           </p>
         </FadeSlide>
 

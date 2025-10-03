@@ -1,13 +1,14 @@
 import AuctionHubImage from "../Images/photos/AuctionHub.png";
-import ResidentImage from "../Images/photos/ResidentManagement.jpg";
+import SocietyImage from "../Images/photos/Project 1/SocietyManagement.jpg";
+import Challenge1 from "../Images/photos/Project 1/challenge1.png"
 
 const ProjectData = [
   {
     id: 1,
-    title: "Resident Management System",
+    title: "Society Management System",
     type: "Housing Society Web Platform",
-    image: ResidentImage,
-    link: "/#",
+    image: SocietyImage,
+    link: "https://society-management-system-seven.vercel.app/",
     client: "Housing Society",
     techStack: ["React.js", "Firebase", "Express.js", "Node.js", "Tailwind CSS"],
     goals:
@@ -15,7 +16,7 @@ const ProjectData = [
     challenges:
       "Designing role-based access (owner vs secretary), integrating Firebase authentication with secure data storage, and ensuring responsive UI with real-time updates.",
     challengeImages: [
-      "/images/projects/role-based-access.png",
+      Challenge1,
       "/images/projects/realtime-updates.png"
     ],
     features: [
@@ -27,10 +28,11 @@ const ProjectData = [
       "Committee member details & rules upload",
       "Room & resident record management",
       "Secure login with Firebase Authentication",
-      "File uploads with ImageKit integration"
+      "Manage both online and offline maintenance requests, track statuses, and notify users",
+      "Track and manage society funds, process transactions, generate financial reports, and integrate with online payment"
     ],
     outcome:
-      "Created a fully functional Resident Management System that simplifies society operations, improves transparency, and connects residents with admins efficiently."
+      "Created a fully functional Society Management System that simplifies society operations and eliminate manual paperwork, improves transparency, and connects residents with secretary efficiently."
   },
   {
     id: 2,

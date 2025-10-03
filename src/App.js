@@ -10,61 +10,126 @@ import ProjectData from "./Project/ProjectData";
 import Contact from "./Contact/Contact";
 import Footer from "./Footer/Footer";
 import { useState, useRef } from "react";
-// import image from "./Images/photos/image.jpg"
-import Logo from "./Images/photos/logo.png";
+import Logo from "./Images/photos/logo.svg";
 import IntroWrapper from "./components/IntroWrapper";
 import { Element } from "react-scroll";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Helmet, HelmetProvider } from "react-helmet-async"; 
+import { Helmet } from "react-helmet-async"; 
 
 const App = () => {
   const [allSkills] = useState(Skilldata);
   const [allProjects] = useState(ProjectData);
-
-  const scrollRef = useRef(null); 
+  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
+  
+  const scrollAnimationRef = useRef(null);
 
   const scrollToBottomSmooth = () => {
-    const targetY = document.body.scrollHeight;
-    const speed = 2;
-    let isCanceled = false;
+    
+    // If scrolling, stop it
+    if (scrollAnimationRef.current) {
+      cancelAnimationFrame(scrollAnimationRef.current);
+      scrollAnimationRef.current = null;
+      setIsAutoScrolling(false);
+      // Re-enable smooth scroll
+      document.documentElement.style.scrollBehavior = 'smooth';
+      return;
+    }
 
-    const cancelScroll = () => {
-      isCanceled = true;
-      if (scrollRef.current) {
-        cancelAnimationFrame(scrollRef.current);
-        scrollRef.current = null;
-      }
-      window.removeEventListener("wheel", cancelScroll);
-      window.removeEventListener("touchstart", cancelScroll);
-      window.removeEventListener("mousedown", cancelScroll);
-    };
+    // IMPORTANT: Disable native smooth scroll
+    document.documentElement.style.scrollBehavior = 'auto';
+    
+    // Start scrolling
+    setIsAutoScrolling(true);
+    
+    const startPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+    const documentHeight = Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.clientHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight
+    );
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+    const targetPosition = documentHeight - windowHeight;
+    const distance = targetPosition - startPosition;
+    
+    if (distance <= 10) {
+      setIsAutoScrolling(false);
+      document.documentElement.style.scrollBehavior = 'smooth';
+      return;
+    }
+    
+    // Dynamic duration based on screen size
+    // Mobile: faster, Desktop: slower
+    const isMobile = window.innerWidth < 768;
+    const baseDuration = isMobile ? 65000 : 35000; // 20s for mobile, 30s for desktop
+    
+    // Adjust duration based on distance
+    const duration = Math.max(baseDuration, (distance / windowHeight) * (isMobile ? 3000 : 4000));
+    
+    let startTime = null;
 
-    window.addEventListener("wheel", cancelScroll, { once: true });
-    window.addEventListener("touchstart", cancelScroll, { once: true });
-    window.addEventListener("mousedown", cancelScroll, { once: true });
+    function animation(currentTime) {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const progress = Math.min(timeElapsed / duration, 1);
 
-    const scrollStep = () => {
-      if (isCanceled) return;
+      // Linear progress - constant speed (no easing)
+      const newPosition = startPosition + (distance * progress);
+      
+      // Scroll with auto behavior
+      window.scrollTo(0, newPosition);
 
-      const currentY = window.scrollY;
-      const step = (targetY - currentY) / speed;
+      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
-      if (currentY < targetY - 2) {
-        window.scrollBy(0, step);
-        scrollRef.current = requestAnimationFrame(scrollStep);
+      if (progress < 1) {
+        scrollAnimationRef.current = requestAnimationFrame(animation);
       } else {
-        cancelScroll();
+        setIsAutoScrolling(false);
+        scrollAnimationRef.current = null;
+        // Re-enable smooth scroll
+        document.documentElement.style.scrollBehavior = 'smooth';
+      }
+    }
+
+    scrollAnimationRef.current = requestAnimationFrame(animation);
+
+    // Stop on user interaction - with passive: false for preventDefault
+    const stopScroll = (e) => {
+      if (scrollAnimationRef.current) {
+        if (e.type === 'wheel' || e.type === 'touchmove') {
+          e.preventDefault();
+        }
+        cancelAnimationFrame(scrollAnimationRef.current);
+        scrollAnimationRef.current = null;
+        setIsAutoScrolling(false);
+        // Re-enable smooth scroll
+        document.documentElement.style.scrollBehavior = 'smooth';
       }
     };
 
-    scrollStep();
+    const stopScrollSimple = () => {
+      if (scrollAnimationRef.current) {
+        cancelAnimationFrame(scrollAnimationRef.current);
+        scrollAnimationRef.current = null;
+        setIsAutoScrolling(false);
+        document.documentElement.style.scrollBehavior = 'smooth';
+      }
+    };
+
+    // Multiple event listeners for better detection
+    window.addEventListener('wheel', stopScroll, { passive: false, once: true });
+    window.addEventListener('touchstart', stopScrollSimple, { once: true });
+    window.addEventListener('touchmove', stopScroll, { passive: false, once: true });
+    window.addEventListener('mousedown', stopScrollSimple, { once: true });
+    window.addEventListener('keydown', stopScrollSimple, { once: true });
   };
 
   return (
     <IntroWrapper>
       <Helmet>
-        <title>Kirtan Trapasiya - Frontend Developer Portfolio</title>
+        <title>Kirtan Trapasiya - Developer Portfolio</title>
         <meta
           name="description"
           content="Welcome to Kirtan Trapasiya's portfolio. A Frontend Developer skilled in React, JavaScript, and modern web technologies."
@@ -80,7 +145,11 @@ const App = () => {
       <div className="min-h-screen font-sans">
         <Navbar Logo={Logo} />
 
-        <Home backgroundImage={null} onViewPortfolio={scrollToBottomSmooth} />
+        <Home 
+          backgroundImage={null} 
+          onViewPortfolio={scrollToBottomSmooth}
+          isScrolling={isAutoScrolling}
+        />
 
         <section id="skills" className="max-w-7xl mx-auto px-4 py-12">
           <Skills skills={allSkills} />
