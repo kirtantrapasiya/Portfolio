@@ -1,32 +1,19 @@
 import React from "react";
 import { Typewriter } from "react-simple-typewriter";
 import { ChevronDown } from "lucide-react";
-import PlayButton from "../Button/PlayButton";
+import SecondButton from "../Button/SecondButton";
+import { useState } from "react";
 import FadeSlide from "../components/FadeSlide";
 import { motion, AnimatePresence } from "framer-motion";
 
-const Home = ({ backgroundImage, onViewPortfolio, isScrolling }) => {
+const Home = ({ backgroundImage}) => {
+
   const scrollToNext = () => {
     const nextSection = document.querySelector("#skills");
     if (nextSection) nextSection.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleHireMeClick = () => {
-    const message = `
-    Hello [Candidate Name],
-    I'm a recruiter at [Your Company Name], and I'm actively looking to connect with talented professionals in the [Your Field/Role] space.
-    We are expanding our team and have a number of exciting new challenges in [Area of Focus].
-    If you or anyone in your network is looking for a new opportunity and is excited by the prospect of [Company's Main Value Proposition], I would love to connect. Feel free to reply here or visit our careers page at [Link].
-    `;
-    const phone = "+919023616249";
-
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (isMobile) {
-      window.open(`whatsapp://send?phone=${phone}&text=${encodeURIComponent(message)}`, "_blank");
-    } else {
-      window.open(`https://web.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`, "_blank");
-    }
-  };
+  const words = ["Developer", "Kirtan Trapasiya", "Designer"];
 
   return (
     <section
@@ -43,22 +30,21 @@ const Home = ({ backgroundImage, onViewPortfolio, isScrolling }) => {
       <div className="relative z-10 max-w-3xl px-4">
         <FadeSlide delay={0.2} direction="up">
           <p className="sm:text-lg tracking-widest font-light mb-6 text-sm">
-            I Love To Design
+            I Love Website
           </p>
         </FadeSlide>
 
         <FadeSlide delay={0.4} direction="up">
           <h1 className="text-2xl sm:text-4xl leading-tight mb-6">
-            <span className="font-light">I&nbsp;&nbsp;Am</span>
-            <span className="font-semibold">&nbsp;&nbsp;a&nbsp;&nbsp;</span>
+            <span className="font-light">I&nbsp;&nbsp;Am&nbsp;&nbsp;</span>
             <span className="font-extrabold">
               <Typewriter
-                words={["Developer", "Kirtan Trapasiya", "Designer"]}
+                words={words}
                 loop
                 cursor
                 cursorStyle="_"
                 typeSpeed={85}
-                deleteSpeed={50}
+                deleteSpeed={85}
                 delaySpeed={1300}
               />
             </span>
@@ -75,17 +61,15 @@ const Home = ({ backgroundImage, onViewPortfolio, isScrolling }) => {
         <FadeSlide delay={0.8} direction="up">
           <div className="flex flex-col items-center gap-3">
             <div className="flex justify-center items-center gap-4">
-              <PlayButton 
-                onClick={onViewPortfolio}
-                isScrolling={isScrolling}
-                className="scale-78"
-              />
-              <button
-                onClick={handleHireMeClick}
+              <a href="#projects">
+                <SecondButton sectionName="My Works"/>
+              </a>
+              <a
+                href="#contact"
                 className="border-2 border-white text-white px-3 py-1 rounded-full transition hover:bg-white hover:text-black"
               >
                 Hire Me
-              </button>
+              </a>
             </div>
           </div>
         </FadeSlide>

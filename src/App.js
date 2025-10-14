@@ -20,111 +20,6 @@ import { Helmet } from "react-helmet-async";
 const App = () => {
   const [allSkills] = useState(Skilldata);
   const [allProjects] = useState(ProjectData);
-  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
-  
-  const scrollAnimationRef = useRef(null);
-
-  const scrollToBottomSmooth = () => {
-    
-    // If scrolling, stop it
-    if (scrollAnimationRef.current) {
-      cancelAnimationFrame(scrollAnimationRef.current);
-      scrollAnimationRef.current = null;
-      setIsAutoScrolling(false);
-      // Re-enable smooth scroll
-      document.documentElement.style.scrollBehavior = 'smooth';
-      return;
-    }
-
-    // IMPORTANT: Disable native smooth scroll
-    document.documentElement.style.scrollBehavior = 'auto';
-    
-    // Start scrolling
-    setIsAutoScrolling(true);
-    
-    const startPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-    const documentHeight = Math.max(
-      document.body.scrollHeight,
-      document.body.offsetHeight,
-      document.documentElement.clientHeight,
-      document.documentElement.scrollHeight,
-      document.documentElement.offsetHeight
-    );
-    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-    const targetPosition = documentHeight - windowHeight;
-    const distance = targetPosition - startPosition;
-    
-    if (distance <= 10) {
-      setIsAutoScrolling(false);
-      document.documentElement.style.scrollBehavior = 'smooth';
-      return;
-    }
-    
-    // Dynamic duration based on screen size
-    // Mobile: faster, Desktop: slower
-    const isMobile = window.innerWidth < 768;
-    const baseDuration = isMobile ? 65000 : 35000; // 20s for mobile, 30s for desktop
-    
-    // Adjust duration based on distance
-    const duration = Math.max(baseDuration, (distance / windowHeight) * (isMobile ? 3000 : 4000));
-    
-    let startTime = null;
-
-    function animation(currentTime) {
-      if (startTime === null) startTime = currentTime;
-      const timeElapsed = currentTime - startTime;
-      const progress = Math.min(timeElapsed / duration, 1);
-
-      // Linear progress - constant speed (no easing)
-      const newPosition = startPosition + (distance * progress);
-      
-      // Scroll with auto behavior
-      window.scrollTo(0, newPosition);
-
-      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-
-      if (progress < 1) {
-        scrollAnimationRef.current = requestAnimationFrame(animation);
-      } else {
-        setIsAutoScrolling(false);
-        scrollAnimationRef.current = null;
-        // Re-enable smooth scroll
-        document.documentElement.style.scrollBehavior = 'smooth';
-      }
-    }
-
-    scrollAnimationRef.current = requestAnimationFrame(animation);
-
-    // Stop on user interaction - with passive: false for preventDefault
-    const stopScroll = (e) => {
-      if (scrollAnimationRef.current) {
-        if (e.type === 'wheel' || e.type === 'touchmove') {
-          e.preventDefault();
-        }
-        cancelAnimationFrame(scrollAnimationRef.current);
-        scrollAnimationRef.current = null;
-        setIsAutoScrolling(false);
-        // Re-enable smooth scroll
-        document.documentElement.style.scrollBehavior = 'smooth';
-      }
-    };
-
-    const stopScrollSimple = () => {
-      if (scrollAnimationRef.current) {
-        cancelAnimationFrame(scrollAnimationRef.current);
-        scrollAnimationRef.current = null;
-        setIsAutoScrolling(false);
-        document.documentElement.style.scrollBehavior = 'smooth';
-      }
-    };
-
-    // Multiple event listeners for better detection
-    window.addEventListener('wheel', stopScroll, { passive: false, once: true });
-    window.addEventListener('touchstart', stopScrollSimple, { once: true });
-    window.addEventListener('touchmove', stopScroll, { passive: false, once: true });
-    window.addEventListener('mousedown', stopScrollSimple, { once: true });
-    window.addEventListener('keydown', stopScrollSimple, { once: true });
-  };
 
   return (
     <IntroWrapper>
@@ -145,11 +40,7 @@ const App = () => {
       <div className="min-h-screen font-sans">
         <Navbar Logo={Logo} />
 
-        <Home 
-          backgroundImage={null} 
-          onViewPortfolio={scrollToBottomSmooth}
-          isScrolling={isAutoScrolling}
-        />
+        <Home backgroundImage={null} />
 
         <section id="skills" className="max-w-7xl mx-auto px-4 py-12">
           <Skills skills={allSkills} />
